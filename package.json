@@ -17,11 +17,6 @@
     "entrypoints": ["src", "src/app"]
   },
   "dependencies": {
-    "@next/bundle-analyzer": "^15.2.1",
-    "@types/prismjs": "^1.26.5",
-    "@types/react-body-classname": "^1.1.10",
-    "@types/rss": "^0.0.32",
-    "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "expiry-map": "^2.0.0",
     "katex": "^0.16.21",
@@ -49,8 +44,11 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/prismjs": "^1.26.5",
     "@types/react": "^19",
+    "@types/react-body-classname": "^1.1.10",
     "@types/react-dom": "^19",
+    "@types/rss": "^0.0.32",
     "eslint": "^9",
     "eslint-config-next": "15.2.1",
     "next-unused": "^0.0.6",

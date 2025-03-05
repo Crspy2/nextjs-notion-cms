@@ -1,28 +1,28 @@
 "use client"
 
+import { memo, MouseEvent, useCallback, useEffect, useState } from "react"
+import { useTheme } from 'next-themes'
 import { IoMoonSharp, IoSunnyOutline } from "react-icons/io5"
-import { FaGithub, FaTwitter, FaYoutube, FaLinkedin } from "react-icons/fa";
-import * as React from 'react'
+import { FaGithub, FaTwitter, FaYoutube, FaLinkedin } from "react-icons/fa"
 
 import * as config from '@/lib/config'
-import { useTheme } from 'next-themes'
 
 import styles from './styles.module.css'
 
 export function FooterImpl() {
-  const [hasMounted, setHasMounted] = React.useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const currentYear = new Date().getFullYear()
 
-  const onToggleDarkMode = React.useCallback(
-    (e: React.MouseEvent) => {
+  const onToggleDarkMode = useCallback(
+    (e: MouseEvent) => {
       e.preventDefault()
       setTheme(theme === "dark" ? "light" : "dark")
     },
     [setTheme]
   )
 
-  React.useEffect(() => {
+  useEffect(() => {
     setHasMounted(true)
   }, [])
 
@@ -99,4 +99,4 @@ export function FooterImpl() {
   )
 }
 
-export const Footer = React.memo(FooterImpl)
+export const Footer = memo(FooterImpl)

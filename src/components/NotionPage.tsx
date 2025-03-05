@@ -1,35 +1,40 @@
 "use client"
 
-import cs from 'classnames'
+
+import { ReactNode, Suspense, useEffect, useMemo, useRef } from "react"
+
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSearchParams } from "next/navigation"
+
 import { ExtendedRecordMap, type PageBlock } from 'notion-types'
 import { formatDate, getBlockTitle, getPageProperty } from 'notion-utils'
-import * as React from 'react'
-import BodyClassName from 'react-body-classname'
 import {
     type NotionComponents,
     NotionRenderer,
     useNotionContext
 } from 'react-notion-x'
+
+import { animate } from 'framer-motion'
+import BodyClassName from 'react-body-classname'
 import { EmbeddedTweet, TweetNotFound, TweetSkeleton } from 'react-tweet'
-import { animate } from 'motion/react'
-import type * as types from '@/lib/types'
-import * as config from '@/lib/config'
-import { mapImageUrl } from '@/lib/map-image-url'
-import { getCanonicalPageUrl, mapPageUrl } from '@/lib/map-page-url'
-import { searchNotion } from '@/lib/search-notion'
+import type { Tweet as TweetType } from "react-tweet/api"
 import { useTheme } from "next-themes"
+
+import * as config from '@/lib/config'
+import { cn } from "@/lib/utils"
+import { getCanonicalPageUrl, mapPageUrl } from '@/lib/map-page-url'
+import { mapImageUrl } from '@/lib/map-image-url'
+import { searchNotion } from '@/lib/search-notion'
+import type * as types from '@/lib/types'
 import { Footer } from './Footer'
 import { NotionPageHeader } from './NotionPageHeader'
 import { Page404 } from './Page404'
 import { PageAside } from './PageAside'
 import { PageHead } from './PageHead'
 import styles from './styles.module.css'
-import { useSearchParams } from "next/navigation"
-import type { Tweet as TweetType } from "react-tweet/api"
-import {useEffect, useRef} from "react";
+
 
 const Code = dynamic(() =>
     import('react-notion-x/build/third-party/code').then(async (m) => {
@@ -95,16 +100,16 @@ function Tweet({ id }: { id: string }) {
     const tweet = (recordMap as types.ExtendedTweetRecordMap)?.tweets?.[id] as unknown as TweetType
 
     return (
-        <React.Suspense fallback={<TweetSkeleton />}>
+        <Suspense fallback={<TweetSkeleton />}>
             {tweet ? <EmbeddedTweet tweet={tweet} /> : <TweetNotFound />}
-        </React.Suspense>
+        </Suspense>
     )
 }
 
 // Property value overrides
 const propertyLastEditedTimeValue = (
     { block, pageHeader }: { block: { last_edited_time: string }, pageHeader: unknown },
-    defaultFn: () => React.ReactNode
+    defaultFn: () => ReactNode
 ) => {
     if (pageHeader && block?.last_edited_time) {
         return `Last updated ${formatDate(block?.last_edited_time, { month: 'long' })}`
@@ -144,7 +149,7 @@ export function NotionPage({
     const searchParams = useSearchParams()
     const lite = searchParams.get('lite')
 
-    const components = React.useMemo<Partial<NotionComponents>>(
+    const components = useMemo<Partial<NotionComponents>>(
         () => ({
             nextLegacyImage: Image,
             nextLink: Link,
@@ -165,7 +170,7 @@ export function NotionPage({
     const isLiteMode = lite === 'true'
     const { theme } = useTheme()
 
-    const siteMapPageUrl = React.useMemo(() => {
+    const siteMapPageUrl = useMemo(() => {
         const params: string[][] | Record<string, string> | string = {}
         if (lite) params.lite = lite
         const searchParams = new URLSearchParams(params)
@@ -179,12 +184,12 @@ export function NotionPage({
     const showTableOfContents = isBlogPost
     const minTableOfContentsItems = 3
 
-    const pageAside = React.useMemo(
+    const pageAside = useMemo(
         () => <PageAside block={block!} recordMap={recordMap!} isBlogPost={isBlogPost} />,
         [block, recordMap, isBlogPost]
     )
 
-    const footer = React.useMemo(() => <Footer />, [])
+    const footer = useMemo(() => <Footer />, [])
 
 
     // Animation Setup
@@ -276,7 +281,7 @@ export function NotionPage({
 
             <div ref={containerRef}>
                 <NotionRenderer
-                    bodyClassName={cs(
+                    bodyClassName={cn(
                         styles.notion,
                         pageId === site.rootNotionPageId && 'index-page'
                     )}

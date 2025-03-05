@@ -1,12 +1,11 @@
-import cs from 'classnames'
-
+import { cn } from "@/lib/utils"
 import styles from './styles.module.css'
 
 export function LoadingIcon(props: { className?: string } & unknown) {
   const { className, ...rest } = props
   return (
     <svg
-      className={cs(styles.loadingIcon, className)}
+      className={cn(styles.loadingIcon, className)}
       {...rest}
       viewBox='0 0 24 24'
     >

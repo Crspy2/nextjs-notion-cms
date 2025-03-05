@@ -1,29 +1,31 @@
-import type * as types from 'notion-types'
-import { IoMoonSharp, IoSunnyOutline } from 'react-icons/io5'
-import cs from 'classnames'
-import * as React from 'react'
-import { Breadcrumbs, Header, Search } from 'react-notion-x'
+"use client"
 
-import { navigationStyle } from '@/lib/config'
+import { useCallback, useEffect, useState } from "react"
 import { useTheme } from 'next-themes'
+import { Breadcrumbs, Header, Search, useNotionContext } from 'react-notion-x'
+import type * as types from 'notion-types'
+
+import { IoMoonSharp, IoSunnyOutline } from 'react-icons/io5'
+import { navigationStyle } from '@/lib/config'
+import { cn } from "@/lib/utils"
 
 import styles from './styles.module.css'
 
 function ToggleThemeButton() {
-  const [hasMounted, setHasMounted] = React.useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
   const { theme, setTheme } = useTheme()
 
-  React.useEffect(() => {
+  useEffect(() => {
     setHasMounted(true)
   }, [])
 
-  const onToggleTheme = React.useCallback(() => {
+  const onToggleTheme = useCallback(() => {
     setTheme(theme === "dark" ? "light" : "dark")
   }, [setTheme])
 
   return (
     <div
-      className={cs('breadcrumb', 'button', !hasMounted && styles.hidden)}
+      className={cn('breadcrumb', 'button', !hasMounted && styles.hidden)}
       onClick={onToggleTheme}
     >
       {hasMounted && theme === "dark" ? <IoMoonSharp /> : <IoSunnyOutline />}
@@ -36,7 +38,7 @@ export function NotionPageHeader({
 }: {
   block: types.CollectionViewPageBlock | types.PageBlock
 }) {
-  // const { components, mapPageUrl } = useNotionContext()
+  const { components, mapPageUrl } = useNotionContext()
 
   if (navigationStyle === 'default') {
     return <Header block={block} />
@@ -48,35 +50,35 @@ export function NotionPageHeader({
         <Breadcrumbs block={block} rootOnly={true} />
 
         <div className='notion-nav-header-rhs breadcrumbs'>
-          {/*{navigationLinks*/}
-          {/*  ?.map((link: { pageId: string, url: string, title: string }, index: number) => {*/}
-          {/*    if (!link?.pageId && !link?.url) {*/}
-          {/*      return null*/}
-          {/*    }*/}
+          {[]
+            ?.map((link: { pageId: string, url: string, title: string }, index: number) => {
+              if (!link?.pageId && !link?.url) {
+                return null
+              }
 
-          {/*    if (link.pageId) {*/}
-          {/*      return (*/}
-          {/*        <components.PageLink*/}
-          {/*          href={mapPageUrl(link.pageId)}*/}
-          {/*          key={index}*/}
-          {/*          className={cs(styles.navLink, 'breadcrumb', 'button')}*/}
-          {/*        >*/}
-          {/*          {link.title}*/}
-          {/*        </components.PageLink>*/}
-          {/*      )*/}
-          {/*    } else {*/}
-          {/*      return (*/}
-          {/*        <components.Link*/}
-          {/*          href={link.url}*/}
-          {/*          key={index}*/}
-          {/*          className={cs(styles.navLink, 'breadcrumb', 'button')}*/}
-          {/*        >*/}
-          {/*          {link.title}*/}
-          {/*        </components.Link>*/}
-          {/*      )*/}
-          {/*    }*/}
-          {/*  })*/}
-          {/*  .filter(Boolean)}*/}
+              if (link.pageId) {
+                return (
+                  <components.PageLink
+                    href={mapPageUrl(link.pageId)}
+                    key={index}
+                    className={cn(styles.navLink, 'breadcrumb', 'button')}
+                  >
+                    {link.title}
+                  </components.PageLink>
+                )
+              } else {
+                return (
+                  <components.Link
+                    href={link.url}
+                    key={index}
+                    className={cn(styles.navLink, 'breadcrumb', 'button')}
+                  >
+                    {link.title}
+                  </components.Link>
+                )
+              }
+            })
+            .filter(Boolean)}
 
           <ToggleThemeButton />
 
