@@ -111,8 +111,7 @@
 
 /* only target safari */
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
-  _::-webkit-full-page-media,
-  _:future,
+  :future,
   :root,
   .notion-collection-card-cover {
     transition: none 0ms linear;

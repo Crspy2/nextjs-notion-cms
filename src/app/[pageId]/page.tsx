@@ -25,7 +25,7 @@ export default async function Page({
     const slug = await params
     const props = await resolveNotionPage(domain, slug.pageId)
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={null}>
             <NotionPage {...props} />
         </Suspense>
     )
