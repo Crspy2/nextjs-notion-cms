@@ -24,8 +24,7 @@ async function searchNotionImpl(
         return res
       }
 
-      // convert non-2xx HTTP responses into errors
-        throw new Error(await res.text())
+      throw new Error(await res.text())
     })
     .then((res) => res.json())
 }
